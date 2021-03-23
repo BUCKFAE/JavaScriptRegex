@@ -1,6 +1,6 @@
 test()
 
-function formatSentence(sentence) {
+function tokenizeSentence(sentence) {
     console.log("Formating sentence: " + sentence)
 
     // Sentence split into words
@@ -53,6 +53,6 @@ function test() {
     sentences.push("»Hallo, Welt!«, sagte Julian.")
 
     sentences.forEach(sentence => {
-        formatSentence(sentence)
+        tokenizeSentence(sentence)
     });
 }
