@@ -50,7 +50,7 @@ function test() {
     sentences.push("Hallo\nWelt!")
     sentences.push("Hallöchen, Welt!")
     sentences.push("Hallo liebe Straße!")
-    sentences.push("»Hallo, Welt!,« sagte Julian.")
+    sentences.push("»Hallo, Welt!«, sagte Julian.")
 
     sentences.forEach(sentence => {
         formatSentence(sentence)
