@@ -16,6 +16,7 @@ function formatSentence(sentence) {
         // Seperating punctuation
         for (let currentCharacter = 0; currentCharacter < currentWord.length; currentCharacter++) {
 
+            // Splitting if the current char is not a letter or a number
             if (checkIfCharIsPunctuation(currentWord[currentCharacter])) {
                 currentWordResult += " "
                 currentWordResult += currentWord[currentCharacter]
@@ -33,6 +34,7 @@ function formatSentence(sentence) {
     return result
 }
 
+// Checks if the given character is a letter or a number
 function checkIfCharIsPunctuation(character) {
     return (character.toLowerCase() === character.toUpperCase()) && !(character >= '0' && character <= '9')
 }
