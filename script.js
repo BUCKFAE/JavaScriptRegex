@@ -84,7 +84,9 @@ function test() {
     sentences.push(["Hallo-Welt", [[0, 4], [5, 5], [6, 9]]])
     sentences.push(["Hallo (?)  Welt!", [[0, 4], [6, 6], [7, 7], [8, 8], [11, 15], [15, 15]]])
     sentences.push([" Hö?  ll-o  W! »lt'", [[2, 3], [4, 4], [7, 8], [9, 9], [10, 10], [13, 13], [14, 14], [16, 16], [17, 18], [19, 19]]])
-    sentences.push(["das \t\t ist \n\n\nein test", [[0, 2], [4, 5], [6, 7], [9, 11], [13, 14], [15, 16], [17, 18], [19, 21], [23, 26]]])
+    sentences.push(["Hallo\nWelt", [0, 4], [7, 10]])
+    sentences.push(["das \t\t  ist \n\n\nein test", [0, 2], [10, 12], [20, 22], [24, 27]])
+    
     
     sentences.forEach(sentence => {
         const [token, coordinates] = tokenizeSentence(sentence[0])
