@@ -1,70 +1,58 @@
-
+// Testing the function
 test()
 
 function tokenizeSentence(sentence) {
 
-    // Sentence split into words
-    let splited = sentence.split(" ")
+    // Escaping tabs and new lines with two empty spaces to ensure coordinates are correct
+    // \n and \t are counted like two characters
+    sentence = sentence.replace(/\n/g, "  ")
+    sentence = sentence.replace(/\t/g, "  ")
+
+    // Appendig whitespace to ensure the last word is added
+    sentence += " "
 
     // Storing token as well as their coordinates relative to the sentece start
     let token = []
     let sentenceTokenCoordinates = []
 
-    // Counts the amount of characters
-    let currentCharacterCoordinate = 0
-    let lastWordEnd = 0
+    // Start of the current word
+    let currentWord = ""
 
     // Adding all words
-    for (let currentWordID = 0; currentWordID < splited.length; currentWordID++) {
+    for (let currentCharacterID = 0; currentCharacterID < sentence.length; currentCharacterID++) {
 
-        let currentWord = splited[currentWordID]
-        let currentWordResult = ""
+        // Splitting if the current char is not a letter or a number
+        if (checkIfCharIsPunctuation(sentence[currentCharacterID])) {
 
-        // Skipping empty words
-        if(currentWord === "") {
-            currentCharacterCoordinate++
-            continue
-        }
+            // Adding the last word if it's not empty
+            if (currentWord !== "") {
 
-    
-        // Default coordinates for word are it's start and end
-        sentenceTokenCoordinates.push([currentCharacterCoordinate, currentCharacterCoordinate + currentWord.length - 1])
+                // Adding the coordinates of the current word
+                let currentWordCoordinates = [currentCharacterID - currentWord.length, currentCharacterID - 1]
+                sentenceTokenCoordinates.push(currentWordCoordinates)
 
-        // Seperating punctuation
-        for (let currentCharacter = 0; currentCharacter < currentWord.length; currentCharacter++) {
+                // Adding the current word to the collection of token
+                token.push(currentWord)
 
-            currentCharacterCoordinate++
+                // Resetting the current word
+                currentWord = ""
 
-            // Splitting if the current char is not a letter or a number
-            if (checkIfCharIsPunctuation(currentWord[currentCharacter])) {
-                currentWordResult += " "
-                currentWordResult += currentWord[currentCharacter]
-                currentWordResult += " "
-
-                // Making the last coordinate short by one
-                sentenceTokenCoordinates[sentenceTokenCoordinates.length - 1][1] = lastWordEnd
-
-                // Adding coordinates of punctuation
-                let currentCharTokenCoordinates = [currentCharacterCoordinate - 1, currentCharacterCoordinate - 1]
-                sentenceTokenCoordinates.push(currentCharTokenCoordinates)
-
-            } else {
-                currentWordResult += currentWord[currentCharacter]
             }
 
+            // If the current char is a token
+            if (sentence[currentCharacterID] !== " ") {
+                sentenceTokenCoordinates.push([currentCharacterID, currentCharacterID])
+                token.push(sentence[currentCharacterID])
+            }
+
+
+        } else {
+            // Appending the current character to the current word
+            currentWord += sentence[currentCharacterID]
         }
 
-        currentCharacterCoordinate++
-
-        // Adding the current word to the result
-        token = token.concat(currentWordResult.split(" ").filter(Boolean))
-
-        // console.log("Coordinates: %o", currentWordCoordinates)
-
-        //sentenceTokenCoordinates.push(currentWordCoordinates)
-        
     }
-    
+
     return [token, sentenceTokenCoordinates]
 }
 
@@ -76,22 +64,22 @@ function checkIfCharIsPunctuation(character) {
 function test() {
 
     sentences = []
-    
+
     sentences.push(["Hallo", [[0, 4]]])
     sentences.push(["Hallo Welt", [[0, 4], [6, 9]]])
     sentences.push(["  Hallo  Welt  ", [[2, 6], [9, 12]]])
     sentences.push([" Hallo, Welt!", [[1, 5], [6, 6], [8, 11], [12, 12]]])
     sentences.push(["Hallo-Welt", [[0, 4], [5, 5], [6, 9]]])
-    sentences.push(["Hallo (?)  Welt!", [[0, 4], [6, 6], [7, 7], [8, 8], [11, 15], [15, 15]]])
-    sentences.push([" Hö?  ll-o  W! »lt'", [[2, 3], [4, 4], [7, 8], [9, 9], [10, 10], [13, 13], [14, 14], [16, 16], [17, 18], [19, 19]]])
-    sentences.push(["Hallo\nWelt", [0, 4], [7, 10]])
-    sentences.push(["das \t\t  ist \n\n\nein test", [0, 2], [10, 12], [20, 22], [24, 27]])
-    
-    
+    sentences.push(["Hallo (?)  Welt!", [[0, 4], [6, 6], [7, 7], [8, 8], [11, 14], [15, 15]]])
+    sentences.push(["  Hö?  ll-o  W! »lt'", [[2, 3], [4, 4], [7, 8], [9, 9], [10, 10], [13, 13], [14, 14], [16, 16], [17, 18], [19, 19]]])
+    sentences.push(["Hallo\nWelt", [[0, 4], [7, 10]]])
+    sentences.push(["das \t\t  ist \n\n\nein test", [[0, 2], [10, 12], [20, 22], [24, 27]]])
+
+
     sentences.forEach(sentence => {
         const [token, coordinates] = tokenizeSentence(sentence[0])
 
-        console.log("\n\n")
+        console.log("\n")
 
         console.log("Sentence: " + sentence[0])
         console.log("Token: " + JSON.stringify(token))
@@ -102,8 +90,9 @@ function test() {
         } else {
             console.log("Expected: " + JSON.stringify(sentence[1]))
             console.log("Actual  : " + JSON.stringify(coordinates))
+            throw Error("Coordinates did not match!")
         }
 
-        console.log("\n\n")
+        console.log("\n")
     });
 }
