@@ -8,7 +8,7 @@ function tokenizeSentence(sentence) {
     sentence = sentence.replace(/\n/g, "  ")
     sentence = sentence.replace(/\t/g, "  ")
 
-    // Appendig whitespace to ensure the last word is added
+    // Appending whitespace to ensure the last word is added
     sentence += " "
 
     // Storing token as well as their coordinates relative to the sentece start
