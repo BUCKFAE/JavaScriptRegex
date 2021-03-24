@@ -11,7 +11,7 @@ function tokenizeSentence(sentence) {
     // Appending whitespace to ensure the last word is added
     sentence += " "
 
-    // Storing token as well as their coordinates relative to the sentece start
+    // Storing token as well as their coordinates relative to the sentence start
     let token = []
     let sentenceTokenCoordinates = []
 
